@@ -4,10 +4,10 @@ import tkinter as tk
 SMALL_FONT_STYLE = ("Arial", 22)
 LARGE_FONT_STYLE = ("Arial", 32)
 BUTTON_FONT_STYLE = ("Arial", 26, "bold")
-FIRST_LINE_BTN_COLOR = "#A7CCED"
-GRID_BTN_COLOR = "#545E75"
-SIDE_BTN_COLOR = "#63ADF2"
-BG_COLOR = "#304D6D"
+ACCENT_COLOR = "#00d1ff"
+SECONDARY_COLOR = "#fe2875"
+TERTIARY_COLOR = "#22252d"
+BG_COLOR = "#12151d"
 FONT_COLOR = "#FFFFFF"
 
 
@@ -66,14 +66,14 @@ class Calculator:
         return total_label, current_label
 
     def create_buttons_frame(self):
-        frame = tk.Frame(self.window, bg=GRID_BTN_COLOR)
+        frame = tk.Frame(self.window, bg=TERTIARY_COLOR)
         frame.pack(expand=True, fill="both")
         return frame
 
     # number grid (and dot)
     def create_number_buttons(self):
         for number, grid_value in self.number_grid.items():
-            button = tk.Button(self.buttons, text=str(number), background=GRID_BTN_COLOR, foreground=FONT_COLOR,
+            button = tk.Button(self.buttons, text=str(number), background=BG_COLOR, foreground=FONT_COLOR,
                                font=BUTTON_FONT_STYLE, borderwidth=0,
                                command=lambda temp_value=number: self.select_numbers(temp_value))
             button.grid(row=grid_value[0], column=grid_value[1], sticky=tk.NSEW)
@@ -82,7 +82,7 @@ class Calculator:
     def create_operator_buttons(self):
         i = 0
         for operator, symbol in self.operators.items():
-            button = tk.Button(self.buttons, text=symbol, background=SIDE_BTN_COLOR, foreground=FONT_COLOR,
+            button = tk.Button(self.buttons, text=symbol, background=TERTIARY_COLOR, foreground=SECONDARY_COLOR,
                                font=BUTTON_FONT_STYLE, borderwidth=0,
                                command=lambda temp_value=operator: self.select_operator(temp_value))
             button.grid(row=i, column=4, sticky=tk.NSEW)
@@ -90,28 +90,28 @@ class Calculator:
 
     # equals, clear field, square and sqrt buttons
     def create_equal_button(self):
-        button = tk.Button(self.buttons, text="=", background=SIDE_BTN_COLOR, foreground=FONT_COLOR,
+        button = tk.Button(self.buttons, text="=", background=TERTIARY_COLOR, foreground=SECONDARY_COLOR,
                            font=BUTTON_FONT_STYLE, borderwidth=0, command=self.evaluate)
         # button.grid(row=4, column=3, columnspan=3, sticky=tk.NSEW)
         button.grid(row=4, column=4, sticky=tk.NSEW)
 
     def create_clear_button(self):
-        button = tk.Button(self.buttons, text="C", background=FIRST_LINE_BTN_COLOR, foreground=FONT_COLOR,
+        button = tk.Button(self.buttons, text="C", background=TERTIARY_COLOR, foreground=ACCENT_COLOR,
                            font=BUTTON_FONT_STYLE, borderwidth=0, command=self.clear_all)
         button.grid(row=0, column=1, sticky=tk.NSEW)
 
     def create_square_button(self):
-        button = tk.Button(self.buttons, text="x\u00b2", background=FIRST_LINE_BTN_COLOR, foreground=FONT_COLOR,
+        button = tk.Button(self.buttons, text="x\u00b2", background=TERTIARY_COLOR, foreground=ACCENT_COLOR,
                            font=BUTTON_FONT_STYLE, borderwidth=0, command=self.square)
         button.grid(row=0, column=2, sticky=tk.NSEW)
 
     def create_sqrt_button(self):
-        button = tk.Button(self.buttons, text="\u221ax", background=FIRST_LINE_BTN_COLOR, foreground=FONT_COLOR,
+        button = tk.Button(self.buttons, text="\u221ax", background=TERTIARY_COLOR, foreground=ACCENT_COLOR,
                            font=BUTTON_FONT_STYLE, borderwidth=0, command=self.sqrt)
         button.grid(row=0, column=3, sticky=tk.NSEW)
 
     def create_sign_button(self):
-        button = tk.Button(self.buttons, text="+/-", background=GRID_BTN_COLOR, foreground=FONT_COLOR,
+        button = tk.Button(self.buttons, text="+/-", background=BG_COLOR, foreground=FONT_COLOR,
                            font=BUTTON_FONT_STYLE, borderwidth=0, command=self.change_sign)
         button.grid(row=4, column=3, sticky=tk.NSEW)
 
