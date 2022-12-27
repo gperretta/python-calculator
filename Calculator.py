@@ -3,17 +3,18 @@ import tkinter as tk
 
 SMALL_FONT_STYLE = ("Arial", 22)
 LARGE_FONT_STYLE = ("Arial", 32)
-BUTTON_FONT_STYLE = ("Arial", 26)
-GRAY = "#8E8E93"
-DARK_GRAY = "#3A3A3C"
-ORANGE = "#FF9500"
-BLACK = "#000000"
-WHITE = "#FFFFFF"
+BUTTON_FONT_STYLE = ("Arial", 26, "bold")
+FIRST_LINE_BTN_COLOR = "#A7CCED"
+GRID_BTN_COLOR = "#545E75"
+SIDE_BTN_COLOR = "#63ADF2"
+BG_COLOR = "#304D6D"
+FONT_COLOR = "#FFFFFF"
 
 
 class Calculator:
 
     # class initializer:
+    # noinspection PyTypeChecker
     def __init__(self):
         self.window = tk.Tk()
         self.window.geometry("390x711")
@@ -49,30 +50,30 @@ class Calculator:
 
     # create calculator elements frames and labels:
     def create_display_frame(self):
-        frame = tk.Frame(self.window, height=211, bg=BLACK)
+        frame = tk.Frame(self.window, height=211, bg=BG_COLOR)
         frame.pack(expand=True, fill="both")
         return frame
 
     def create_display_labels(self):
-        total_label = tk.Label(self.display, text=self.total_text, anchor=tk.E, background=BLACK, foreground=WHITE,
-                               padx=24, font=SMALL_FONT_STYLE)
+        total_label = tk.Label(self.display, text=self.total_text, anchor=tk.E,
+                               background=BG_COLOR, foreground=FONT_COLOR, padx=24, font=SMALL_FONT_STYLE)
         total_label.pack(expand=True, fill="both")
 
-        current_label = tk.Label(self.display, text=self.current_text, anchor=tk.E, background=BLACK, foreground=WHITE,
-                                 padx=24, font=LARGE_FONT_STYLE)
+        current_label = tk.Label(self.display, text=self.current_text, anchor=tk.E,
+                                 background=BG_COLOR, foreground=FONT_COLOR, padx=24, font=LARGE_FONT_STYLE)
         current_label.pack(expand=True, fill="both")
 
         return total_label, current_label
 
     def create_buttons_frame(self):
-        frame = tk.Frame(self.window, bg=DARK_GRAY)
+        frame = tk.Frame(self.window, bg=GRID_BTN_COLOR)
         frame.pack(expand=True, fill="both")
         return frame
 
     # number grid (and dot)
     def create_number_buttons(self):
         for number, grid_value in self.number_grid.items():
-            button = tk.Button(self.buttons, text=str(number), background=DARK_GRAY, foreground=WHITE,
+            button = tk.Button(self.buttons, text=str(number), background=GRID_BTN_COLOR, foreground=FONT_COLOR,
                                font=BUTTON_FONT_STYLE, borderwidth=0,
                                command=lambda temp_value=number: self.select_numbers(temp_value))
             button.grid(row=grid_value[0], column=grid_value[1], sticky=tk.NSEW)
@@ -81,49 +82,59 @@ class Calculator:
     def create_operator_buttons(self):
         i = 0
         for operator, symbol in self.operators.items():
-            button = tk.Button(self.buttons, text=symbol, background=ORANGE, foreground=WHITE, font=BUTTON_FONT_STYLE,
-                               borderwidth=0, command=lambda temp_value=operator: self.select_operator(temp_value))
+            button = tk.Button(self.buttons, text=symbol, background=SIDE_BTN_COLOR, foreground=FONT_COLOR,
+                               font=BUTTON_FONT_STYLE, borderwidth=0,
+                               command=lambda temp_value=operator: self.select_operator(temp_value))
             button.grid(row=i, column=4, sticky=tk.NSEW)
             i += 1
 
     # equals, clear field, square and sqrt buttons
     def create_equal_button(self):
-        button = tk.Button(self.buttons, text="=", background=ORANGE, foreground=WHITE, font=BUTTON_FONT_STYLE,
-                           borderwidth=0, command=self.evaluate)
+        button = tk.Button(self.buttons, text="=", background=SIDE_BTN_COLOR, foreground=FONT_COLOR,
+                           font=BUTTON_FONT_STYLE, borderwidth=0, command=self.evaluate)
         # button.grid(row=4, column=3, columnspan=3, sticky=tk.NSEW)
         button.grid(row=4, column=4, sticky=tk.NSEW)
 
     def create_clear_button(self):
-        button = tk.Button(self.buttons, text="C", background=GRAY, foreground=WHITE, font=BUTTON_FONT_STYLE,
-                           borderwidth=0, command=self.clear_all)
+        button = tk.Button(self.buttons, text="C", background=FIRST_LINE_BTN_COLOR, foreground=FONT_COLOR,
+                           font=BUTTON_FONT_STYLE, borderwidth=0, command=self.clear_all)
         button.grid(row=0, column=1, sticky=tk.NSEW)
 
     def create_square_button(self):
-        button = tk.Button(self.buttons, text="x\u00b2", background=GRAY, foreground=WHITE, font=BUTTON_FONT_STYLE,
-                           borderwidth=0, command=self.square)
+        button = tk.Button(self.buttons, text="x\u00b2", background=FIRST_LINE_BTN_COLOR, foreground=FONT_COLOR,
+                           font=BUTTON_FONT_STYLE, borderwidth=0, command=self.square)
         button.grid(row=0, column=2, sticky=tk.NSEW)
 
     def create_sqrt_button(self):
-        button = tk.Button(self.buttons, text="\u221ax", background=GRAY, foreground=WHITE, font=BUTTON_FONT_STYLE,
-                           borderwidth=0, command=self.sqrt)
+        button = tk.Button(self.buttons, text="\u221ax", background=FIRST_LINE_BTN_COLOR, foreground=FONT_COLOR,
+                           font=BUTTON_FONT_STYLE, borderwidth=0, command=self.sqrt)
         button.grid(row=0, column=3, sticky=tk.NSEW)
 
     def create_sign_button(self):
-        button = tk.Button(self.buttons, text="+/-", background=DARK_GRAY, foreground=WHITE, font=BUTTON_FONT_STYLE,
-                           borderwidth=0, command=self.change_sign)
+        button = tk.Button(self.buttons, text="+/-", background=GRID_BTN_COLOR, foreground=FONT_COLOR,
+                           font=BUTTON_FONT_STYLE, borderwidth=0, command=self.change_sign)
         button.grid(row=4, column=3, sticky=tk.NSEW)
 
     # (non-elementary calculation functions)
     def square(self):
-        self.current_text = str(eval(f"{self.current_text}**2"))
+        try:
+            self.current_text = str(eval(f"{self.current_text}**2"))
+        except SyntaxError:
+            self.current_text = "SYNTAX ERROR"
         self.update_current_label()
 
     def sqrt(self):
-        self.current_text = str(eval(f"{self.current_text}**0.5"))
+        try:
+            self.current_text = str(eval(f"{self.current_text}**0.5"))
+        except SyntaxError:
+            self.current_text = "SYNTAX ERROR"
         self.update_current_label()
 
     def change_sign(self):
-        self.current_text = str(eval(f"{self.current_text}*-1"))
+        try:
+            self.current_text = str(eval(f"{self.current_text}*-1"))
+        except SyntaxError:
+            self.current_text = "SYNTAX ERROR"
         self.update_current_label()
 
     # (cleaning up the code)
