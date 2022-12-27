@@ -44,6 +44,8 @@ class Calculator:
         for element in range(1, 5):
             self.buttons.rowconfigure(element, weight=1)
             self.buttons.columnconfigure(element, weight=1)
+        # pc keyboard binding:
+        self.keys_binding()
 
     # create calculator elements frames and labels:
     def create_display_frame(self):
@@ -179,6 +181,16 @@ class Calculator:
             self.current_text = "MATH ERROR"
         finally:
             self.update_current_label()
+
+    # binding the calculator keys with laptop physical keyboard:
+    def keys_binding(self):
+        self.window.bind("<Return>", lambda event: self.evaluate())
+        # for numbers and dot:
+        for key in self.number_grid:
+            self.window.bind(str(key), lambda event, number=key: self.select_numbers(number))
+        # for elementary operators:
+        for key in self.operators:
+            self.window.bind(str(key), lambda event, operator=key: self.select_numbers(operator))
 
     # call to Tk main loop:
     def run(self):
