@@ -14,7 +14,6 @@ FONT_COLOR = "#FFFFFF"
 class Calculator:
 
     # class initializer:
-    # noinspection PyTypeChecker
     def __init__(self):
         self.window = tk.Tk()
         self.window.geometry("390x711")
@@ -208,7 +207,7 @@ class Calculator:
         self.window.mainloop()
 
 
-# run config.:
+# 
 if __name__ == "__main__":
     calculator = Calculator()
     calculator.run()
